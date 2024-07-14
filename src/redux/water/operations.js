@@ -1,6 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { axiosInstance } from '../users/operations';
 import CONSTANTS from 'src/components/Constants/constants.js';
+import { getUnixDay } from '../../utils/getUnixDay';
+
 
 axios.defaults.baseURL = `${CONSTANTS.AXIOS.baseURL}`;
 
@@ -67,6 +70,35 @@ export const fetchMonthlyWater = createAsyncThunk(
     try {
       const response = await axios.get(`${CONSTANTS.WATER_ENDPOINTS.monthly}`);
       console.log(response);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getMonthWater = createAsyncThunk(
+  'water/getMonthWater',
+
+  async (month, thunkAPI) => {
+    try {
+      const unixMonthStartDate = getUnixDay(month);
+      const response = await axiosInstance.get(
+        `/water/month/${unixMonthStartDate}`
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getDayWater = createAsyncThunk(
+  'water/getDayWater',
+  async (date, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(`/water/day/${date}`);
+
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

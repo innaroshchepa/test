@@ -6,8 +6,8 @@ const SignInPage = lazy(() => import('./pages/SignInPage'));
 const TrackerPage = lazy(() => import('./pages/TrackerPage'));
 const SignUpPage = lazy(() => import('./pages/SignUpPage'));
 
-import PrivateRoute from './PrivateRoute';
-import RestrictedRoute from './RestrictedRoute';
+// import PrivateRoute from './PrivateRoute';
+// import RestrictedRoute from './RestrictedRoute';
 import SharedLayout from './components/SharedLayout/SharedLayout.jsx';
 
 import './App.css';

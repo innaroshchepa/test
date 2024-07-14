@@ -1,29 +1,72 @@
-import { useState } from 'react';
-
-const CalendarPagination = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-
-  const handlePreviousMonth = () => {
-    const previousMonth = new Date(currentDate);
-    previousMonth.setMonth(previousMonth.getMonth() - 1);
-    setCurrentDate(previousMonth);
+import css from './calendarPagination.module.css';
+// import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { format, addMonths, subMonths, startOfMonth } from 'date-fns';
+// import { IconPie } from '../../components/Icons/IconPie';
+export const CalendarPagination = ({
+  currentDate,
+  setCurrentDate,
+  isActive,
+  setIsActive,
+}) => {
+  const minDate = new Date('2024-01-01');
+  const handlePrevMonth = () => {
+    const newMonth = subMonths(currentDate, 1);
+    if (newMonth >= startOfMonth(minDate)) {
+      setCurrentDate(newMonth);
+    }
   };
-
   const handleNextMonth = () => {
-    const nextMonth = new Date(currentDate);
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    setCurrentDate(nextMonth);
+    if (currentDate < new Date()) {
+      const newMonth = addMonths(currentDate, 1);
+      setCurrentDate(newMonth);
+    }
   };
+  const isPrevDisabled = currentDate <= startOfMonth(minDate);
+  const isNextDisabled = currentDate > new Date();
 
   return (
-    <div className="calendar-pagination">
-      <button onClick={handlePreviousMonth}>&lt;</button>
-      <span>{currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-      <button onClick={handleNextMonth}>&gt;</button>
+    <div className={css.paginationSection}>
+      {isActive ? (
+        <p className={css.month}>Month</p>
+      ) : (
+        <p className={css.month}>Statistic</p>
+      )}
+      <div className={css.chooseMonth}>
+        {isActive ? (
+          <>
+            <button
+              className={css.button}
+              disabled={isPrevDisabled}
+              onClick={handlePrevMonth}
+            >
+              {/* <BsChevronLeft
+                className={isPrevDisabled ? css.chevronDisabled : css.chevron}
+              /> */}
+            </button>
+            <span className={css.span}>
+              {format(currentDate, 'MMMM, yyyy')}
+            </span>
+            <button
+              className={isNextDisabled ? css.buttonDisabled : css.button}
+              onClick={handleNextMonth}
+              disabled={isNextDisabled}
+            >
+              {/* <BsChevronRight
+                className={isNextDisabled ? css.chevronDisabled : css.chevron}
+              /> */}
+            </button>
+          </>
+        ) : null}
+
+        <button
+          className={`${css.statisticBtn} ${
+            !isActive ? css.statisticBtnActive : ''
+          }`}
+          onClick={() => setIsActive(!isActive)}
+        >
+          {/* <IconPie /> */}
+        </button>
+      </div>
     </div>
   );
 };
-
-export default CalendarPagination;
-
-

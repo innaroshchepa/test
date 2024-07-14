@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import CONSTANTS from 'src/components/Constants/constants.js';
 import { handleToken } from 'src/utils/handleToken';
 
+
 export const signUp = createAsyncThunk(
   'users/signUp',
   async (credentials, { rejectWithValue }) => {
@@ -77,3 +78,7 @@ export const refresh = createAsyncThunk(
     }
   },
 );
+
+export const axiosInstance = axios.create({
+  baseURL: 'https://water-wise-frontend.vercel.app/',
+});
